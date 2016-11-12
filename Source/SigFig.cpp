@@ -167,7 +167,8 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 	char str[MAX_INPUT_SIZE];
 	int decimalIndex, numSFsToSet, expToSet;
 	double significandToSet;
-	int strIndex, i = 0;
+	int strIndex = 0;
+	int i = 0;
 	bool hasDecimal = false;
 
 	bufferChar = input[i];
