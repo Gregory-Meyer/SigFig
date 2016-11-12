@@ -9,12 +9,12 @@ int main() {
 
 	SigFig sf, sf2;
 
-	sf = SigFig(a);
+	sf = SigFig(a);	
 	sf2 = SigFig(b);
 
 	cout << sf << endl;
 	cout << sf2 << endl;
-	
+
 	cout << sf.add(sf2) << endl;
 	cout << sf.subtract(sf2) << endl;
 }
