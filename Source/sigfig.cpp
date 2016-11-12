@@ -18,17 +18,81 @@ sigfig::sigfig(char a[MAX_SIZE]) {
 sigfig sigfig::plus(sigfig sf) {
 	double d1 = getVal() * pow(10, getExp());
 	double d2 = sf.getVal() * pow(10, sf.getExp());
-
 	double d = d1 + d2;
-	return sf;
+
+	sigfig sfRet;
+
+	if (d != 0) {
+		int place1 = getExp() - getSFs() + 1;
+		int place2 = getExp() - getSFs() + 1;
+
+		int tExp = 0;
+		double dTemp = d;
+
+		while (dTemp >= 10) {
+			dTemp /= 10;
+			tExp++;
+		}
+
+		while (dTemp < 1) {
+			dTemp *= 10;
+			tExp--;
+		}
+
+		int tnSFs;
+
+		if (place1 > place2) {
+			tnSFs = tExp - place1;
+		} else {
+			tnSFs = tExp - place2;
+		}
+		
+		sfRet.roundToSFs(d, tnSFs);
+	} else {
+		sfRet.roundToSFs(0, 1);
+	}
+
+	return sfRet;
 }
 
 sigfig sigfig::minus(sigfig sf) {
 	double d1 = getVal() * pow(10, getExp());
 	double d2 = sf.getVal() * pow(10, sf.getExp());
-
 	double d = d1 - d2;
-	return sf;
+
+	sigfig sfRet;
+
+	if (d != 0) {
+		int place1 = getExp() - getSFs() + 1;
+		int place2 = getExp() - getSFs() + 1;
+
+		int tExp = 0;
+		double dTemp = d;
+
+		while (dTemp >= 10) {
+			dTemp /= 10;
+			tExp++;
+		}
+
+		while (dTemp < 1) {
+			dTemp *= 10;
+			tExp--;
+		}
+
+		int tnSFs;
+
+		if (place1 > place2) {
+			tnSFs = tExp - place1;
+		} else {
+			tnSFs = tExp - place2;
+		}
+
+		sfRet.roundToSFs(d, tnSFs);
+	} else {
+		sfRet.roundToSFs(0, 1);
+	}
+
+	return sfRet;
 }
 
 sigfig sigfig::mult(sigfig sf) {
@@ -168,6 +232,8 @@ void sigfig::read(istream& ins) {
 void sigfig::write(ostream& outs) {
 	if (getSFs() == 1) {
 		outs << getVal() << 'e' << getExp();
+	} else if (getVal() == 0) {
+		outs << "0e0";
 	} else {
 		double temp = getVal();
 		int i = 1;
@@ -198,28 +264,34 @@ void sigfig::write(ostream& outs) {
 }
 
 void sigfig::roundToSFs(double d, int nSF) {
-	int i = 0;
+	if (d == 0) {
+		setExp(0);
+		setVal(0);
+		setSFs(1);
+	} else {
+		int i = 0;
 
-	while (d > pow(10, nSF)) {
-		d /= 10;
-		i++;
+		while (d > pow(10, nSF)) {
+			d /= 10;
+			i++;
+		}
+
+		while (d < pow(10, nSF - 1)) {
+			d *= 10;
+			i--;
+		}
+
+		d = round(d);
+
+		while (d >= 10) {
+			d /= 10;
+			i++;
+		}
+
+		setExp(i);
+		setVal(d);
+		setSFs(nSF);
 	}
-
-	while (d < pow(10, nSF - 1)) {
-		d *= 10;
-		i--;
-	}
-
-	d = round(d);
-
-	while (d >= 10) {
-		d /= 10;
-		i++;
-	}
-
-	setExp(i);
-	setVal(d);
-	setSFs(nSF);
 }
 
 istream& operator >> (istream& ins, sigfig& sf) {
