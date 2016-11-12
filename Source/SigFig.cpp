@@ -15,8 +15,8 @@ SigFig::SigFig() {
 	setNumSigFigs(1);
 }
 
-SigFig::SigFig(char a[MAX_INPUT_SIZE]) {
-	writeFromString(a);
+SigFig::SigFig(char input[MAX_INPUT_SIZE]) {
+	writeFromString(input);
 }
 
 SigFig SigFig::add(SigFig aSigFig) {
@@ -220,19 +220,20 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 }
 
 void SigFig::read(istream& inputStream) {
-	char a[MAX_INPUT_SIZE];
+	char output[MAX_INPUT_SIZE];
 
-	char c;
-	while (inputStream.get(c)) {
-		if (c != '0') {
-			inputStream.putback(c);
+	// trim all leading zeros from inputStream
+	char bufferChar;
+	while (inputStream.get(bufferChar)) {
+		if (bufferChar != '0') {
+			inputStream.putback(bufferChar);
 			break;
 		}
 	}
 
-	inputStream >> a;
+	inputStream >> output;
 
-	writeFromString(a);
+	writeFromString(output);
 }
 
 void SigFig::write(ostream& outputStream) {
@@ -269,34 +270,34 @@ void SigFig::write(ostream& outputStream) {
 	}
 }
 
-void SigFig::roundRealToSigFig(double d, int nSF) {
-	if (d == 0) {
+void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
+	if (real == 0) {
 		setExponent(0);
 		setSignificand(0);
 		setNumSigFigs(1);
 	} else {
 		int i = 0;
 
-		while (d > pow(10, nSF)) {
-			d /= 10;
+		while (real > pow(10, numSFsToSet)) {
+			real /= 10;
 			i++;
 		}
 
-		while (d < pow(10, nSF - 1)) {
-			d *= 10;
+		while (real < pow(10, numSFsToSet - 1)) {
+			real *= 10;
 			i--;
 		}
 
-		d = round(d);
+		real = round(real);
 
-		while (d >= 10) {
-			d /= 10;
+		while (real >= 10) {
+			real /= 10;
 			i++;
 		}
 
 		setExponent(i);
-		setSignificand(d);
-		setNumSigFigs(nSF);
+		setSignificand(real);
+		setNumSigFigs(numSFsToSet);
 	}
 }
 
