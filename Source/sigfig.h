@@ -1,53 +1,71 @@
-#ifndef SIGFIG_H
-#define SIGFIG_H
+#ifndef SigFig_H
+#define SigFig_H
 
 #include <iostream>
 
 using namespace std;
 
-class sigfig {
+class SigFig {
 public:
-	static const int MAX_SIZE = 256;
+	// maximum number of characters allowed for a char[] input
+	static const int MAX_INPUT_SIZE = 256;
 
-	sigfig();
+	// default constructor, initializes as 0e0
+	SigFig();
 
-	sigfig(char a[MAX_SIZE]);
+	// initalizes a SigFig from a char[] input
+	SigFig(char a[MAX_INPUT_SIZE]);
 
-	sigfig plus(sigfig sf);
+	// adds two SigFig objects and returns the result
+	SigFig add(SigFig aSigFig);
 
-	sigfig minus(sigfig sf);
+	// subtracts two SigFig objects and returns the result
+	SigFig subtract(SigFig aSigFig);
 
-	sigfig mult(sigfig sf);
+	// multiplies two SigFig objects and returns the result
+	SigFig multiply(SigFig aSigFig);
 
-	sigfig quot(sigfig sf);
+	// divides two SigFig objects and returns the result
+	SigFig divide(SigFig aSigFig);
 
-	void setVal(double a);
+	// sets the significand or value as newSignificand
+	void setSignificand(double newSignificand);
 
-	double getVal();
+	// returns the significand
+	double getSignificand();
 
-	void setExp(int a);
+	// sets the exponent as newExponent
+	void setExponent(int newExponent);
 
-	int getExp();
+	// gets the exponent
+	int getExponent();
 
-	void setSFs(int a);
+	// sets the number of significant figures as newNumSigFigs if newNumSigFigs
+	// is greater than 0
+	void setNumSigFigs(int newNumSigFigs);
 
-	int getSFs();
+	// returns the number of significant figures
+	int getNumSigFigs();
 
-	void readChar(char a[MAX_SIZE]);
+	// sets the values of a significant figure from a char[] input
+	void writeFromString(char a[MAX_INPUT_SIZE]);
 
-	void read(istream& ins);
+	// takes a real number 'real' and a number of significant figures 
+	// 'numSigFigs' and rounds that number to the correct amount of significant
+	// figures, then assigns that value to the SigFig called from
+	void roundRealToSigFig(double real, int numSigFigs);
 
-	void write(ostream& ins);
+	void read(istream& inputStream);
+
+	void write(ostream& outputStream);
 
 private:
-	double value;
-	int exponent;
-	int nSFs;
-
-	void roundToSFs(double d, int nSF);
+	double significand_;
+	int exponent_;
+	int numSigFigs_;
 };
 
-istream& operator >> (istream& ins, sigfig& sf);
-ostream& operator << (ostream& outs, sigfig sf);
+istream& operator >> (istream& inputStream, SigFig& aSigFig);
+ostream& operator << (ostream& outputStream, SigFig aSigFig);
 
 #endif

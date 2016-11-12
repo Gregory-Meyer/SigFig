@@ -1,17 +1,20 @@
 #include <iostream>
-#include "sigfig.h"
+#include "SigFig.h"
 
 using namespace std;
 
 int main() {
-	char a[] = "4.";
-	char b[] = "4.5";
+	char a[] = "4.0";
+	char b[] = "4.1";
 
-	sigfig sf, sf2;
+	SigFig sf, sf2;
 
-	sf = sigfig(a);
-	sf2 = sigfig(b);
+	sf = SigFig(a);
+	sf2 = SigFig(b);
 
-	cout << sf.plus(sf2) << endl;
-	cout << sf.minus(sf2) << endl;
+	cout << sf << endl;
+	cout << sf2 << endl;
+	
+	cout << sf.add(sf2) << endl;
+	cout << sf.subtract(sf2) << endl;
 }

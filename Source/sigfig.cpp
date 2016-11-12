@@ -5,237 +5,242 @@
 #include <cstdlib>
 #include <cmath>
 
-#include "sigfig.h"
+#include "SigFig.h"
 
 using namespace std;
 
-sigfig::sigfig() { }
-
-sigfig::sigfig(char a[MAX_SIZE]) {
-	readChar(a);
+SigFig::SigFig() {
+	setSignificand(0);
+	setExponent(0);
+	setNumSigFigs(1);
 }
 
-sigfig sigfig::plus(sigfig sf) {
-	double d1 = getVal() * pow(10, getExp());
-	double d2 = sf.getVal() * pow(10, sf.getExp());
-	double d = d1 + d2;
+SigFig::SigFig(char a[MAX_INPUT_SIZE]) {
+	writeFromString(a);
+}
 
-	sigfig sfRet;
+SigFig SigFig::add(SigFig aSigFig) {
+	SigFig numToReturn;
+	int numSFsToSet, place1, place2, expToSet;
+	double realValue1 = getSignificand() * pow(10, getExponent());
+	double realValue2 = aSigFig.getSignificand()
+		* pow(10, aSigFig.getExponent());
+	double compoundRealValue = realValue1 + realValue2;
 
-	if (d != 0) {
-		int place1 = getExp() - getSFs() + 1;
-		int place2 = getExp() - getSFs() + 1;
+	if (compoundRealValue != 0) {
+		place1 = getExponent() - getNumSigFigs() + 1;
+		place2 = getExponent() - getNumSigFigs() + 1;
 
-		int tExp = 0;
-		double dTemp = d;
+		expToSet = 0;
 
-		while (dTemp >= 10) {
-			dTemp /= 10;
-			tExp++;
+		while (compoundRealValue >= 10) {
+			compoundRealValue /= 10;
+			expToSet++;
 		}
 
-		while (dTemp < 1) {
-			dTemp *= 10;
-			tExp--;
+		while (compoundRealValue < 1) {
+			compoundRealValue *= 10;
+			expToSet--;
 		}
 
-		int tnSFs;
+		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
-			tnSFs = tExp - place1;
+			numSFsToSet = expToSet - place1;
 		} else {
-			tnSFs = tExp - place2;
+			numSFsToSet = expToSet - place2;
 		}
 		
-		sfRet.roundToSFs(d, tnSFs);
+		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
-		sfRet.roundToSFs(0, 1);
+		numToReturn.roundRealToSigFig(0, 1);
 	}
 
-	return sfRet;
+	return numToReturn;
 }
 
-sigfig sigfig::minus(sigfig sf) {
-	double d1 = getVal() * pow(10, getExp());
-	double d2 = sf.getVal() * pow(10, sf.getExp());
-	double d = d1 - d2;
+SigFig SigFig::subtract(SigFig aSigFig) {
+	SigFig numToReturn;
+	int numSFsToSet, place1, place2, expToSet;
+	double realValue1 = getSignificand() * pow(10, getExponent());
+	double realValue2 = aSigFig.getSignificand()
+		* pow(10, aSigFig.getExponent());
+	double compoundRealValue = realValue1 - realValue2;
 
-	sigfig sfRet;
+	if (compoundRealValue != 0) {
+		place1 = getExponent() - getNumSigFigs() + 1;
+		place2 = getExponent() - getNumSigFigs() + 1;
 
-	if (d != 0) {
-		int place1 = getExp() - getSFs() + 1;
-		int place2 = getExp() - getSFs() + 1;
+		expToSet = 0;
 
-		int tExp = 0;
-		double dTemp = d;
-
-		while (dTemp >= 10) {
-			dTemp /= 10;
-			tExp++;
+		while (compoundRealValue >= 10) {
+			compoundRealValue /= 10;
+			expToSet++;
 		}
 
-		while (dTemp < 1) {
-			dTemp *= 10;
-			tExp--;
+		while (compoundRealValue < 1) {
+			compoundRealValue *= 10;
+			expToSet--;
 		}
 
-		int tnSFs;
+		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
-			tnSFs = tExp - place1;
+			numSFsToSet = expToSet - place1;
 		} else {
-			tnSFs = tExp - place2;
+			numSFsToSet = expToSet - place2;
 		}
-
-		sfRet.roundToSFs(d, tnSFs);
+		
+		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
-		sfRet.roundToSFs(0, 1);
+		numToReturn.roundRealToSigFig(0, 1);
 	}
 
-	return sfRet;
+	return numToReturn;
 }
 
-sigfig sigfig::mult(sigfig sf) {
-	double d = getVal() * pow(10, getExp()) * sf.getVal() * pow(10, sf.getExp());
+SigFig SigFig::multiply(SigFig aSigFig) {
+	SigFig numToReturn;
+	int numSFsToSet;
+	double compoundRealValue = getSignificand() * pow(10, getExponent())
+		* aSigFig.getSignificand() * pow(10, aSigFig.getExponent());
 
-	int tnSFs;
-
-	if (getSFs() < sf.getSFs()) {
-		tnSFs = getSFs();
+	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = getNumSigFigs();
 	} else {
-		tnSFs = sf.getSFs();
+		numSFsToSet = aSigFig.getNumSigFigs();
 	}
 
-	sigfig sfRet;
-	sfRet.roundToSFs(d, tnSFs);
-	return sfRet;
+	numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
+	return numToReturn;
 }
 
-sigfig sigfig::quot(sigfig sf) {
-	double d = getVal() * pow(10, getExp()) / (sf.getVal() * pow(10, sf.getExp()));
+SigFig SigFig::divide(SigFig aSigFig) {
+	SigFig numToReturn;
+	int numSFsToSet;
+	double compoundRealValue = getSignificand() * pow(10, getExponent())
+		/ aSigFig.getSignificand() * pow(10, aSigFig.getExponent());
 
-	int tnSFs;
-
-	if (getSFs() < sf.getSFs()) {
-		tnSFs = getSFs();
+	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = getNumSigFigs();
 	} else {
-		tnSFs = sf.getSFs();
+		numSFsToSet = aSigFig.getNumSigFigs();
 	}
 
-	sigfig sfRet;
-	sfRet.roundToSFs(d, tnSFs);
-	return sfRet;
+	numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
+	return numToReturn;
 }
 
-void sigfig::setVal(double d) {
-	value = d;
+void SigFig::setSignificand(double newSignificand) {
+	significand_ = newSignificand;
 }
 
-double sigfig::getVal() {
-	return value;
+double SigFig::getSignificand() {
+	return significand_;
 }
 
-void sigfig::setExp(int i) {
-	exponent = i;
+void SigFig::setExponent(int newExponent) {
+	exponent_ = newExponent;
 }
 
-int sigfig::getExp() {
-	return exponent;
+int SigFig::getExponent() {
+	return exponent_;
 }
 
-void sigfig::setSFs(int a) {
-	nSFs = a;
+void SigFig::setNumSigFigs(int newNumSigFigs) {
+	if (newNumSigFigs > 0) {
+		numSigFigs_ = newNumSigFigs;
+	} else {
+		cerr << "ERROR: Tried to set number of significant figures as " <<
+			newNumSigFigs <<
+			". Number of significant figures must be greater than zero."
+			<< endl;
+	}
 }
 
-int sigfig::getSFs() {
-	return nSFs;
+int SigFig::getNumSigFigs() {
+	return numSigFigs_;
 }
 
-void sigfig::readChar(char a[MAX_SIZE]) {
-	char temp;
-	char str[MAX_SIZE];
+void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
+	char bufferChar;
+	char str[MAX_INPUT_SIZE];
+	int decimalIndex, numSFsToSet, expToSet;
+	double significandToSet;
+	int strIndex, i = 0;
+	bool hasDecimal = false;
 
-	bool hasDec = false;
-	int decIndex;
-	int strIndex = 0;
-	int startIndex = 0;
+	bufferChar = input[i];
 
-	int i = 0;
-	temp = a[i];
-
-	while ((isdigit(temp)) || (temp == '.')) {
-		if (isdigit(temp)) {
-			str[strIndex] = temp;
+	while ((isdigit(bufferChar)) || (bufferChar == '.')) {
+		if (isdigit(bufferChar)) {
+			str[strIndex] = bufferChar;
 			strIndex++;
 		} else {
-			if (temp == '.') {
-				hasDec = true;
-				decIndex = i;
+			if (bufferChar == '.') {
+				hasDecimal = true;
+				decimalIndex = i;
 			}
 		}
 
 		i++;
-		temp = a[i];
+		bufferChar = input[i];
 	}
 
-	int tnSFs = 0;
+	numSFsToSet = 0;
 
-	if (hasDec) {
-		if (decIndex == 0) {
-			tnSFs = strIndex;
-		} else {
-			tnSFs = strIndex;
-		}
+	if (hasDecimal) {
+		numSFsToSet = strIndex;
 
-		if (decIndex == strIndex) {
-			setExp(tnSFs - 1);
+		if (decimalIndex == strIndex) {
+			expToSet = numSFsToSet - 1;
 		} else {
-			setExp(decIndex - 1);
+			expToSet = decimalIndex - 1;
 		}
 	} else {
-		for (int i = 0; i <= strIndex; i++) {
-			if (str[i] != '0') {
-				tnSFs = i;
+		for (int j = 0; j <= strIndex; j++) {
+			if (str[j] != '0') {
+				numSFsToSet = j;
 			}
 		}
 
-		setExp(strIndex);
+		expToSet = strIndex;
 	}
 
-	setSFs(tnSFs);
+	significandToSet = atof(input);
 
-	double tempD = atof(a);
-
-	while (tempD > 10) {
-		tempD /= 10;
+	while (significandToSet > 10) {
+		significandToSet /= 10;
 	}
 
-	setVal(tempD);
+	setSignificand(significandToSet);
+	setExponent(expToSet);
+	setNumSigFigs(numSFsToSet);
 }
 
-void sigfig::read(istream& ins) {
-	char a[MAX_SIZE];
+void SigFig::read(istream& inputStream) {
+	char a[MAX_INPUT_SIZE];
 
 	char c;
-	while (ins.get(c)) {
+	while (inputStream.get(c)) {
 		if (c != '0') {
-			ins.putback(c);
+			inputStream.putback(c);
 			break;
 		}
 	}
 
-	ins >> a;
+	inputStream >> a;
 
-	readChar(a);
+	writeFromString(a);
 }
 
-void sigfig::write(ostream& outs) {
-	if (getSFs() == 1) {
-		outs << getVal() << 'e' << getExp();
-	} else if (getVal() == 0) {
-		outs << "0e0";
+void SigFig::write(ostream& outputStream) {
+	if (getNumSigFigs() == 1) {
+		outputStream << getSignificand() << 'e' << getExponent();
+	} else if (getSignificand() == 0) {
+		outputStream << "0e0";
 	} else {
-		double temp = getVal();
+		double temp = getSignificand();
 		int i = 1;
 
 		while (temp != round(temp)) {
@@ -243,31 +248,31 @@ void sigfig::write(ostream& outs) {
 			i++;
 		}
 
-		if (getVal() != round(getVal())) {
-			if (i < getSFs()) {
-				outs << getVal();
-				for (int j = 0; j < getSFs() - i; j++) {
-					outs << '0';
+		if (getSignificand() != round(getSignificand())) {
+			if (i < getNumSigFigs()) {
+				outputStream << getSignificand();
+				for (int j = 0; j < getNumSigFigs() - i; j++) {
+					outputStream << '0';
 				}
-				outs << 'e' << getExp();
+				outputStream << 'e' << getExponent();
 			} else {
-				outs << getVal() << 'e' << getExp();
+				outputStream << getSignificand() << 'e' << getExponent();
 			}
 		} else {
-			outs << getVal() << '.';
-			for (int j = 0; j < getSFs() - 1; j++) {
-				outs << '0';
+			outputStream << getSignificand() << '.';
+			for (int j = 0; j < getNumSigFigs() - 1; j++) {
+				outputStream << '0';
 			}
-			outs << 'e' << getExp();
+			outputStream << 'e' << getExponent();
 		}
 	}
 }
 
-void sigfig::roundToSFs(double d, int nSF) {
+void SigFig::roundRealToSigFig(double d, int nSF) {
 	if (d == 0) {
-		setExp(0);
-		setVal(0);
-		setSFs(1);
+		setExponent(0);
+		setSignificand(0);
+		setNumSigFigs(1);
 	} else {
 		int i = 0;
 
@@ -288,18 +293,18 @@ void sigfig::roundToSFs(double d, int nSF) {
 			i++;
 		}
 
-		setExp(i);
-		setVal(d);
-		setSFs(nSF);
+		setExponent(i);
+		setSignificand(d);
+		setNumSigFigs(nSF);
 	}
 }
 
-istream& operator >> (istream& ins, sigfig& sf) {
-	sf.read(ins);
-	return ins;
+istream& operator >> (istream& inputStream, SigFig& aSigFig) {
+	aSigFig.read(inputStream);
+	return inputStream;
 }
 
-ostream& operator << (ostream& outs, sigfig sf) {
-	sf.write(outs);
-	return outs;
+ostream& operator << (ostream& outputStream, SigFig aSigFig) {
+	aSigFig.write(outputStream);
+	return outputStream;
 }
