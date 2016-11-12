@@ -29,27 +29,34 @@ SigFig SigFig::add(SigFig aSigFig) {
 
 	if (compoundRealValue != 0) {
 		place1 = getExponent() - getNumSigFigs() + 1;
-		place2 = getExponent() - getNumSigFigs() + 1;
+		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
+
+		cout << place1 << endl;
+		cout << place2 << endl;
 
 		expToSet = 0;
 
-		while (compoundRealValue >= 10) {
+		while (abs(compoundRealValue) >= 10) {
 			compoundRealValue /= 10;
 			expToSet++;
 		}
 
-		while (compoundRealValue < 1) {
+		while (abs(compoundRealValue) < 1) {
 			compoundRealValue *= 10;
 			expToSet--;
 		}
 
+		cout << expToSet << endl;
+
 		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
-			numSFsToSet = expToSet - place1;
+			numSFsToSet = expToSet - place1 + 1;
 		} else {
-			numSFsToSet = expToSet - place2;
+			numSFsToSet = expToSet - place2 + 1;
 		}
+
+		cout << numSFsToSet << endl;
 		
 		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
@@ -69,27 +76,34 @@ SigFig SigFig::subtract(SigFig aSigFig) {
 
 	if (compoundRealValue != 0) {
 		place1 = getExponent() - getNumSigFigs() + 1;
-		place2 = getExponent() - getNumSigFigs() + 1;
+		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
+
+		cout << place1 << endl;
+		cout << place2 << endl;
 
 		expToSet = 0;
 
-		while (compoundRealValue >= 10) {
+		while (abs(compoundRealValue) >= 10) {
 			compoundRealValue /= 10;
 			expToSet++;
 		}
 
-		while (compoundRealValue < 1) {
+		while (abs(compoundRealValue) < 1) {
 			compoundRealValue *= 10;
 			expToSet--;
 		}
 
+		cout << expToSet << endl;
+
 		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
-			numSFsToSet = expToSet - place1;
+			numSFsToSet = expToSet - place1 + 1;
 		} else {
-			numSFsToSet = expToSet - place2;
+			numSFsToSet = expToSet - place2 + 1;
 		}
+
+		cout << numSFsToSet << endl;
 		
 		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
@@ -278,19 +292,19 @@ void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
 	} else {
 		int i = 0;
 
-		while (real > pow(10, numSFsToSet)) {
+		while (abs(real) > pow(10, numSFsToSet)) {
 			real /= 10;
 			i++;
 		}
 
-		while (real < pow(10, numSFsToSet - 1)) {
+		while (abs(real) < pow(10, numSFsToSet - 1)) {
 			real *= 10;
 			i--;
 		}
 
 		real = round(real);
 
-		while (real >= 10) {
+		while (abs(real) >= 10) {
 			real /= 10;
 			i++;
 		}

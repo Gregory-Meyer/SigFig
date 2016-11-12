@@ -4,8 +4,8 @@
 using namespace std;
 
 int main() {
-	char a[] = "4.0";
-	char b[] = "4.1";
+	char a[] = "8.00";
+	char b[] = "4.10";
 
 	SigFig sf, sf2;
 
