@@ -130,14 +130,6 @@ public:
 	
 	bool operator >= (const SigFig& rhs) const;
 
-	SigFig& operator ++ ();
-
-	SigFig operator ++ (int);
-
-	SigFig& operator -- ();
-
-	SigFig operator -- (int);
-
 private:
 	double significand_;
 	int exponent_;
@@ -147,5 +139,13 @@ private:
 istream& operator >> (istream& inputStream, SigFig& aSigFig);
 
 ostream& operator << (ostream& outputStream, SigFig aSigFig);
+
+SigFig& operator ++ (SigFig& aSigFig);
+
+SigFig operator ++ (SigFig& aSigFig, int);
+
+SigFig& operator -- (SigFig& aSigFig);
+
+SigFig operator -- (SigFig& aSigFig, int);
 
 #endif

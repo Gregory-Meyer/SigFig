@@ -455,24 +455,26 @@ bool SigFig::operator >= (const SigFig& rhs) const {
 	return !(*this < rhs);
 }
 
-SigFig& SigFig::operator ++ () {
-	this->roundRealToSigFig(this->doubleValue() + 1, this->getNumSigFigs());
-	return *this;
+SigFig& operator ++ (SigFig& aSigFig) {
+	aSigFig.roundRealToSigFig(aSigFig.doubleValue() + 1,
+		aSigFig.getNumSigFigs());
+	return aSigFig;
 }
 
-SigFig SigFig::operator ++ (int) {
-	SigFig temp = *this;
-	++(*this);
+SigFig operator ++ (SigFig& aSigFig, int) {
+	SigFig temp = aSigFig;
+	++aSigFig;
 	return temp;
 }
 
-SigFig& SigFig::operator -- () {
-	this->roundRealToSigFig(this->doubleValue() - 1, this->getNumSigFigs());
-	return *this;
+SigFig& operator -- (SigFig& aSigFig) {
+	aSigFig.roundRealToSigFig(aSigFig.doubleValue() - 1,
+		aSigFig.getNumSigFigs());
+	return aSigFig;
 }
 
-SigFig SigFig::operator -- (int){
-	SigFig temp = *this;
-	--(*this);
-	return temp;
+SigFig operator -- (SigFig& aSigFig, int){
+	SigFig temp = aSigFig;
+	--aSigFig;
+	return aSigFig;
 }	
