@@ -477,4 +477,4 @@ SigFig operator -- (SigFig& aSigFig, int){
 	SigFig temp = aSigFig;
 	--aSigFig;
 	return temp;
-}	
+}
