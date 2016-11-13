@@ -155,48 +155,6 @@ SigFig SigFig::remainder(SigFig aSigFig) const {
 	return numToReturn;
 }
 
-SigFig SigFig::sfRoundUp() const {
-	double realValue = this->doubleValue();
-
-	if (realValue < 0) {
-		return this->sfFloor();
-	} else {
-		return this->sfCeil();
-	}
-}
-
-SigFig SigFig::sfRoundDown() const {
-	SigFig numToReturn;
-	double realValue = this->doubleValue();
-
-	numToReturn.roundRealToSigFig(trunc(realValue), this->getNumSigFigs());
-	return numToReturn;
-}
-
-SigFig SigFig::sfFloor() const {
-	SigFig numToReturn;
-	double realValue = this->doubleValue();
-
-	numToReturn.roundRealToSigFig(floor(realValue), this->getNumSigFigs());
-	return numToReturn;
-}
-
-SigFig SigFig::sfCeil() const {
-	SigFig numToReturn;
-	double realValue = this->doubleValue();
-
-	numToReturn.roundRealToSigFig(ceil(realValue), this->getNumSigFigs());
-	return numToReturn;
-}
-
-SigFig SigFig::sfRound() const {
-	SigFig numToReturn;
-	double realValue = this->doubleValue();
-
-	numToReturn.roundRealToSigFig(round(realValue), this->getNumSigFigs());
-	return numToReturn;
-}
-
 int SigFig::intValue() const {
 	return (int) this->getSignificand() * pow(10, this->getExponent());
 }

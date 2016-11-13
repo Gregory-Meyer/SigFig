@@ -35,21 +35,6 @@ public:
 	// divides two SigFig objects and returns the remainder
 	SigFig remainder(SigFig aSigFig) const;
 
-	// rounds SigFig object away from zero and returns the result
-	SigFig sfRoundUp() const;
-
-	// rounds SigFig object towards zero and returns the result
-	SigFig sfRoundDown() const;
-
-	// rounds SigFig object towards negative infinity and returns the resolt
-	SigFig sfFloor() const;
-
-	// rounds SigFig object towards positive infinity and returns the result
-	SigFig sfCeil() const;
-
-	// rounds SigFig object and returns the result
-	SigFig sfRound() const;
-
 	// returns the value of the SigFig object as an int
 	int intValue() const;
 
