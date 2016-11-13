@@ -14,18 +14,22 @@ SigFig::SigFig() {
 }
 
 SigFig::SigFig(char input[MAX_INPUT_SIZE]) {
-	writeFromString(input);
+	this->writeFromString(input);
 }
 
 SigFig::SigFig(double real, int numSFsToSet) {
-	roundRealToSigFig(real, numSFsToSet);
+	this->roundRealToSigFig(real, numSFsToSet);
+}
+
+SigFig::SigFig(double real) {
+	this->doubleToSigFig(real);
 }
 
 SigFig SigFig::add(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet, place1, place2, expToSet;
-	double realValue1 = this->doubleValue();
-	double realValue2 = aSigFig.doubleValue();
+	double realValue1 = (double) *this;
+	double realValue2 = (double) aSigFig;
 	double compoundRealValue = realValue1 + realValue2;
 
 	if (compoundRealValue != 0) {
@@ -67,8 +71,8 @@ SigFig SigFig::add(SigFig aSigFig) const {
 SigFig SigFig::subtract(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet, place1, place2, expToSet;
-	double realValue1 = this->doubleValue();
-	double realValue2 = aSigFig.doubleValue();
+	double realValue1 = (double) *this;
+	double realValue2 = (double) aSigFig;
 	double compoundRealValue = realValue1 - realValue2;
 
 	if (compoundRealValue != 0) {
@@ -110,7 +114,7 @@ SigFig SigFig::subtract(SigFig aSigFig) const {
 SigFig SigFig::multiply(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double compoundRealValue = this->doubleValue() * aSigFig.doubleValue();
+	double compoundRealValue = (double) *this * (double) aSigFig;
 
 	if (this->getNumSigFigs() < aSigFig.getNumSigFigs()) {
 		numSFsToSet = this->getNumSigFigs();
@@ -125,7 +129,7 @@ SigFig SigFig::multiply(SigFig aSigFig) const {
 SigFig SigFig::divide(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double compoundRealValue = this->doubleValue() / aSigFig.doubleValue();
+	double compoundRealValue = (double) *this / (double) aSigFig;
 
 	if (this->getNumSigFigs() < aSigFig.getNumSigFigs()) {
 		numSFsToSet = this->getNumSigFigs();
@@ -140,8 +144,8 @@ SigFig SigFig::divide(SigFig aSigFig) const {
 SigFig SigFig::remainder(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double realValue1 = this->doubleValue();
-	double realValue2 = aSigFig.doubleValue();
+	double realValue1 = (double) *this;
+	double realValue2 = (double) aSigFig;
 	double compoundRealValue = realValue1 - realValue2
 	* (int) (realValue1 / realValue2);
 
@@ -164,7 +168,7 @@ double SigFig::doubleValue() const {
 }
 
 bool SigFig::isInt() const {
-	return this->intValue() == this->doubleValue();
+	return (int) *this == (double) *this;
 }
 
 bool SigFig::isEqualStrict(SigFig aSigFig) const {
@@ -173,15 +177,15 @@ bool SigFig::isEqualStrict(SigFig aSigFig) const {
 }
 
 bool SigFig::isEqual(SigFig aSigFig) const {
-	return this->doubleValue() == aSigFig.doubleValue();
+	return (double) *this == (double) aSigFig;
 }
 
 bool SigFig::isGreater(SigFig aSigFig) const {
-	return this->doubleValue() > aSigFig.doubleValue();
+	return (double) *this > (double) aSigFig;
 }
 
 bool SigFig::isLess(SigFig aSigFig) const {
-	return this->doubleValue() < aSigFig.doubleValue();
+	return aSigFig.isGreater(*this);
 }
 
 bool SigFig::isGreaterOrEqualStrict(SigFig aSigFig) const {
@@ -296,6 +300,64 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 	this->setNumSigFigs(numSFsToSet);
 }
 
+void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
+	if (real == 0) {
+		this->setExponent(0);
+		this->setSignificand(0);
+		this->setNumSigFigs(1);
+	} else {
+		int i = 0;
+
+		while (abs(real) > pow(10, numSFsToSet)) {
+			real /= 10;
+			i++;
+		}
+
+		while (abs(real) < pow(10, numSFsToSet - 1)) {
+			real *= 10;
+			i--;
+		}
+
+		real = round(real);
+
+		while (abs(real) >= 10) {
+			real /= 10;
+			i++;
+		}
+
+		this->setExponent(i);
+		this->setSignificand(real);
+		this->setNumSigFigs(numSFsToSet);
+	}
+}
+
+void SigFig::doubleToSigFig(const double real) {
+	int expToSet = 0;
+	int numSFsToSet = 1;
+	double significandToSet = real;
+
+	while (significandToSet >= 10) {
+		significandToSet /= 10;
+		expToSet++;
+	}
+
+	while (significandToSet < 1) {
+		significandToSet *= 10;
+		expToSet--;
+	}
+
+	while (round(significandToSet) != significandToSet) {
+		significandToSet *= 10;
+		numSFsToSet++;
+	}
+
+	significandToSet *= pow(10, numSFsToSet - 1);
+
+	this->setSignificand(significandToSet);
+	this->setExponent(expToSet);
+	this->setNumSigFigs(numSFsToSet);
+}
+
 void SigFig::read(istream& inputStream) {
 	char output[MAX_INPUT_SIZE];
 
@@ -348,35 +410,12 @@ void SigFig::write(ostream& outputStream) {
 	}
 }
 
-void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
-	if (real == 0) {
-		this->setExponent(0);
-		this->setSignificand(0);
-		this->setNumSigFigs(1);
-	} else {
-		int i = 0;
+SigFig::operator const int() const{
+	return this->intValue();
+}
 
-		while (abs(real) > pow(10, numSFsToSet)) {
-			real /= 10;
-			i++;
-		}
-
-		while (abs(real) < pow(10, numSFsToSet - 1)) {
-			real *= 10;
-			i--;
-		}
-
-		real = round(real);
-
-		while (abs(real) >= 10) {
-			real /= 10;
-			i++;
-		}
-
-		this->setExponent(i);
-		this->setSignificand(real);
-		this->setNumSigFigs(numSFsToSet);
-	}
+SigFig::operator const double() const{
+	return this->doubleValue();
 }
 
 istream& operator >> (istream& inputStream, SigFig& aSigFig) {
@@ -388,6 +427,7 @@ ostream& operator << (ostream& outputStream, SigFig aSigFig) {
 	aSigFig.write(outputStream);
 	return outputStream;
 }
+
 
 bool operator == (const SigFig& lhs, const SigFig& rhs) {
 	return lhs.isEqual(rhs);
@@ -414,7 +454,7 @@ bool operator >= (const SigFig& lhs, const SigFig& rhs) {
 }
 
 SigFig& operator ++ (SigFig& aSigFig) {
-	aSigFig.roundRealToSigFig(aSigFig.doubleValue() + 1,
+	aSigFig.roundRealToSigFig((double) aSigFig + 1,
 		aSigFig.getNumSigFigs());
 	return aSigFig;
 }
@@ -426,7 +466,7 @@ SigFig operator ++ (SigFig& aSigFig, int) {
 }
 
 SigFig& operator -- (SigFig& aSigFig) {
-	aSigFig.roundRealToSigFig(aSigFig.doubleValue() - 1,
+	aSigFig.roundRealToSigFig((double) aSigFig- 1,
 		aSigFig.getNumSigFigs());
 	return aSigFig;
 }

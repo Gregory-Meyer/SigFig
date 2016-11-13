@@ -18,4 +18,12 @@ SigFig sfCeil(const SigFig aSigFig);
 // rounds SigFig object and returns the result
 SigFig sfRound(const SigFig aSigFig);
 
+SigFig sfExp(const SigFig aSigFig);
+
+SigFig sfLn(const SigFig aSigFig);
+
+SigFig sfLog(const int base, const SigFig aSigFig);
+
+SigFig sfPow(const SigFig base, const SigFig exponent);
+
 #endif

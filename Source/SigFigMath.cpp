@@ -46,3 +46,19 @@ SigFig sfRound(const SigFig aSigFig)  {
 	numToReturn.roundRealToSigFig(round(realValue), aSigFig.getNumSigFigs());
 	return numToReturn;
 }
+
+SigFig sfExp(const SigFig exponent) {
+	return exponent;
+}
+
+SigFig sfLn(const SigFig aSigFig) {
+	return aSigFig;
+}
+
+SigFig sfLog(const SigFig base, const SigFig aSigFig) {
+	return base;
+}
+
+SigFig sfPow(const SigFig base, const SigFig exponent) {
+	return base;
+}

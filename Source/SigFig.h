@@ -20,6 +20,10 @@ public:
 	// significant figures
 	SigFig(double real, int numSFsToSet);
 
+	// initializes a SigFig from a real number and assumes the number of
+	// significant figures
+	SigFig(double real);
+
 	// adds two SigFig objects and returns the result
 	SigFig add(SigFig aSigFig) const;
 
@@ -99,9 +103,16 @@ public:
 	// figures, then assigns that value to the SigFig called from
 	void roundRealToSigFig(double real, int numSigFigs);
 
+	// takes a real number 'real' and assigns a SigFig object from that double
+	void doubleToSigFig(double real);
+
 	void read(istream& inputStream);
 
 	void write(ostream& outputStream);
+
+	explicit operator const int() const;
+
+	explicit operator const double() const; 
 
 private:
 	double significand_;
