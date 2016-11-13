@@ -1,16 +1,23 @@
 #include <iostream>
+#include <cmath>
+
 #include "SigFig.h"
 
 using namespace std;
 
 int main() {
-	char a[] = "4.0";
-	char b[] = "4.1";
+	srand(time(NULL));
+	double r1, r2;
+
+	r1 = (double) rand() / (RAND_MAX + 1.0) * 10;
+	r2 = (double) rand() / (RAND_MAX + 1.0) * 10;
+	r1 -= 5;
+	r2 -= 5;
 
 	SigFig sf, sf2;
 
-	sf = SigFig(a);	
-	sf2 = SigFig(b);
+	sf = SigFig(r1, 2);	
+	sf2 = SigFig(r2, 2);
 
 	cout << sf << endl;
 	cout << sf2 << endl;

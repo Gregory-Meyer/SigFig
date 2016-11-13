@@ -16,6 +16,10 @@ public:
 	// initalizes a SigFig from a char[] input
 	SigFig(char a[MAX_INPUT_SIZE]);
 
+	// initializes a SigFig from a real number and an integer number of
+	// significant figures
+	SigFig(double real, int numSFsToSet);
+
 	// adds two SigFig objects and returns the result
 	SigFig add(SigFig aSigFig);
 
