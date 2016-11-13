@@ -479,42 +479,57 @@ SigFig operator -- (SigFig& aSigFig, int){
 	return temp;
 }
 
-SigFig operator + (SigFig lhs, SigFig rhs) {
+const SigFig operator + (const SigFig& lhs, const SigFig& rhs) {
+	SigFig temp = lhs;
+	temp += rhs;
+	return temp;
+}
+
+const SigFig operator - (const SigFig& lhs, const SigFig& rhs) {
+	SigFig temp = lhs;
+	temp -= rhs;
+	return temp;
+}
+
+const SigFig operator * (const SigFig& lhs, const SigFig& rhs) {
+	SigFig temp = lhs;
+	temp *= rhs;
+	return temp;
+}
+
+const SigFig operator / (const SigFig& lhs, const SigFig& rhs) {
+	SigFig temp = lhs;
+	temp /= rhs;
+	return temp;
+}
+
+const SigFig operator % (const SigFig& lhs, const SigFig& rhs) {
+	SigFig temp = lhs;
+	temp %= rhs;
+	return temp;
+}
+
+SigFig& operator += (SigFig& lhs, const SigFig& rhs) {
+	lhs = lhs.add(rhs);
 	return lhs;
 }
 
-SigFig operator - (SigFig lhs, SigFig rhs) {
+SigFig& operator -= (SigFig& lhs, const SigFig& rhs) {
+	lhs = lhs.subtract(rhs);
 	return lhs;
 }
 
-SigFig operator * (SigFig lhs, SigFig rhs) {
+SigFig& operator *= (SigFig& lhs, const SigFig& rhs) {
+	lhs = lhs.multiply(rhs);
 	return lhs;
 }
 
-SigFig operator / (SigFig lhs, SigFig rhs) {
+SigFig& operator /= (SigFig& lhs, const SigFig& rhs) {
+	lhs = lhs.divide(rhs);
 	return lhs;
 }
 
-SigFig operator % (SigFig lhs, SigFig rhs) {
-	return lhs;
-}
-
-SigFig& operator += (SigFig& lhs, SigFig rhs) {
-	return lhs;
-}
-
-SigFig& operator -= (SigFig& lhs, SigFig rhs) {
-	return lhs;
-}
-
-SigFig& operator *= (SigFig& lhs, SigFig rhs) {
-	return lhs;
-}
-
-SigFig& operator /= (SigFig& lhs, SigFig rhs) {
-	return lhs;
-}
-
-SigFig& operator %= (SigFig& lhs, SigFig rhs) {
+SigFig& operator %= (SigFig& lhs, const SigFig& rhs) {
+	lhs = lhs.remainder(rhs);
 	return lhs;
 }

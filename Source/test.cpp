@@ -20,13 +20,21 @@ int main() {
 	sf = SigFig(r1, 5);
 	sf2 = SigFig(r2, 5);
 
+	r1 = sf.doubleValue();
+	r2 = sf2.doubleValue();
+
 	cout << sf.doubleValue() << endl;
 	cout << sf2.doubleValue() << endl << endl;
 
-	cout << (sf == sf2) << endl;
-	cout << (sf != sf2) << endl;
-	cout << (sf < sf2) << endl;
-	cout << (sf > sf2) << endl;
-	cout << (sf <= sf2) << endl;
-	cout << (sf >= sf2) << endl;
+	cout << (sf += sf2).doubleValue() << endl;
+	cout << (r1 += r2) << endl;
+	cout << (sf -= sf2).doubleValue() << endl;
+	cout << (r1 -= r2) << endl;
+	cout << (sf *= sf2).doubleValue() << endl;
+	cout << (r1 *= r2) << endl;
+	cout << (sf /= sf2).doubleValue() << endl;
+	cout << (r1 /= r2) << endl << endl;
+
+	cout << sf.doubleValue() << endl;
+	cout << sf2.doubleValue() << endl;
 }
