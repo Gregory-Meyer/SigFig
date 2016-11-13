@@ -148,4 +148,24 @@ SigFig& operator -- (SigFig& aSigFig);
 
 SigFig operator -- (SigFig& aSigFig, int);
 
+SigFig operator + (SigFig lhs, SigFig rhs);
+
+SigFig operator - (SigFig lhs, SigFig rhs);
+
+SigFig operator * (SigFig lhs, SigFig rhs);
+
+SigFig operator / (SigFig lhs, SigFig rhs);
+
+SigFig operator % (SigFig lhs, SigFig rhs);
+
+SigFig& operator += (SigFig& lhs, SigFig rhs);
+
+SigFig& operator -= (SigFig& lhs, SigFig rhs);
+
+SigFig& operator *= (SigFig& lhs, SigFig rhs);
+
+SigFig& operator /= (SigFig& lhs, SigFig rhs);
+
+SigFig& operator %= (SigFig& lhs, SigFig rhs);
+
 #endif

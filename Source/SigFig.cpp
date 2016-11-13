@@ -478,3 +478,43 @@ SigFig operator -- (SigFig& aSigFig, int){
 	--aSigFig;
 	return temp;
 }
+
+SigFig operator + (SigFig lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig operator - (SigFig lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig operator * (SigFig lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig operator / (SigFig lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig operator % (SigFig lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig& operator += (SigFig& lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig& operator -= (SigFig& lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig& operator *= (SigFig& lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig& operator /= (SigFig& lhs, SigFig rhs) {
+	return lhs;
+}
+
+SigFig& operator %= (SigFig& lhs, SigFig rhs) {
+	return lhs;
+}
