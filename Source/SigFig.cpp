@@ -143,6 +143,25 @@ SigFig SigFig::divide(SigFig aSigFig) {
 	return numToReturn;
 }
 
+SigFig SigFig::remainder(SigFig aSigFig) {
+	SigFig numToReturn;
+	int numSFsToSet;
+	double realValue1 = getSignificand() * pow(10, getExponent());
+	double realValue2 = aSigFig.getSignificand()
+		* pow(10, aSigFig.getExponent());
+	double compoundRealValue = realValue1 - realValue2
+		* (int) (realValue1 / realValue2);
+
+	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = getNumSigFigs();
+	} else {
+		numSFsToSet = aSigFig.getNumSigFigs();
+	}
+
+	numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
+	return numToReturn;
+}
+
 void SigFig::setSignificand(double newSignificand) {
 	significand_ = newSignificand;
 }

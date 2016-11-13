@@ -32,6 +32,9 @@ public:
 	// divides two SigFig objects and returns the result
 	SigFig divide(SigFig aSigFig);
 
+	// divides two SigFig objects and returns the remainder
+	SigFig remainder(SigFig aSigFig);
+
 	// sets the significand or value as newSignificand
 	void setSignificand(double newSignificand);
 
