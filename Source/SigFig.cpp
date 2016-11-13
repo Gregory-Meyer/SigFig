@@ -431,28 +431,28 @@ ostream& operator << (ostream& outputStream, SigFig aSigFig) {
 	return outputStream;
 }
 
-bool SigFig::operator == (const SigFig& rhs) const {
-	return this->isEqual(rhs);
+bool operator == (const SigFig& lhs, const SigFig& rhs) {
+	return lhs.isEqual(rhs);
 }
 
-bool SigFig::operator != (const SigFig& rhs) const {
-	return !(*this == rhs);
+bool operator != (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs == rhs);
 }
 
-bool SigFig::operator < (const SigFig& rhs) const {
-	return this->isLess(rhs);
+bool operator < (const SigFig& lhs, const SigFig& rhs) {
+	return lhs.isLess(rhs);
 }
 
-bool SigFig::operator > (const SigFig& rhs) const {
-	return rhs < *this;
+bool operator > (const SigFig& lhs, const SigFig& rhs) {
+	return rhs < lhs;
 }
 
-bool SigFig::operator <= (const SigFig& rhs) const {
-	return !(*this > rhs);
+bool operator <= (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs > rhs);
 }
 
-bool SigFig::operator >= (const SigFig& rhs) const {
-	return !(*this < rhs);
+bool operator >= (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs < rhs);
 }
 
 SigFig& operator ++ (SigFig& aSigFig) {

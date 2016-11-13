@@ -118,18 +118,6 @@ public:
 
 	void write(ostream& outputStream);
 
-	bool operator == (const SigFig& rhs) const;
-	
-	bool operator != (const SigFig& rhs) const;
-	
-	bool operator < (const SigFig& rhs) const;
-	
-	bool operator > (const SigFig& rhs) const;
-	
-	bool operator <= (const SigFig& rhs) const;
-	
-	bool operator >= (const SigFig& rhs) const;
-
 private:
 	double significand_;
 	int exponent_;
@@ -139,6 +127,18 @@ private:
 istream& operator >> (istream& inputStream, SigFig& aSigFig);
 
 ostream& operator << (ostream& outputStream, SigFig aSigFig);
+
+bool operator == (const SigFig& lhs, const SigFig& rhs);
+	
+bool operator != (const SigFig& lhs, const SigFig& rhs);
+	
+bool operator < (const SigFig& lhs, const SigFig& rhs);
+	
+bool operator > (const SigFig& lhs, const SigFig& rhs);
+	
+bool operator <= (const SigFig& lhs, const SigFig& rhs);
+	
+bool operator >= (const SigFig& lhs, const SigFig& rhs);
 
 SigFig& operator ++ (SigFig& aSigFig);
 
