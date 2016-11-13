@@ -171,6 +171,10 @@ bool SigFig::isInt() const {
 	return (int) *this == (double) *this;
 }
 
+bool SigFig::significandIsInt() const {
+	return this->getSignificand() == round(this->getSignificand());
+}
+
 bool SigFig::isEqualStrict(SigFig aSigFig) const {
 	return this->isEqual(aSigFig)
 		&& (this->getNumSigFigs() == aSigFig.getNumSigFigs());
@@ -389,7 +393,7 @@ void SigFig::write(ostream& outputStream) {
 			i++;
 		}
 
-		if (this->isInt()) {
+		if (!this->significandIsInt()) {
 			if (i < this->getNumSigFigs()) {
 				outputStream << this->getSignificand();
 				for (int j = 0; j < this->getNumSigFigs() - i; j++) {

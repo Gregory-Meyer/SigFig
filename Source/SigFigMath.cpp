@@ -48,17 +48,64 @@ SigFig sfRound(const SigFig aSigFig)  {
 }
 
 SigFig sfExp(const SigFig exponent) {
-	return exponent;
+	SigFig numToReturn;
+	double significandToSet = exp((double) exponent);
+	numToReturn.roundRealToSigFig(significandToSet, exponent.getNumSigFigs());
+	
+	return numToReturn;
 }
 
 SigFig sfLn(const SigFig aSigFig) {
-	return aSigFig;
+	SigFig numToReturn;
+	double significandToSet = log(abs((double) aSigFig));
+	numToReturn.roundRealToSigFig(significandToSet, aSigFig.getNumSigFigs());
+	
+	return numToReturn;
 }
 
 SigFig sfLog(const SigFig base, const SigFig aSigFig) {
-	return base;
+	SigFig numToReturn;
+	int numSFsToSet;
+	double significandToSet = (double) (sfLn(aSigFig) / sfLn(base));
+
+	if (base.getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = base.getNumSigFigs();
+	} else {
+		numSFsToSet = aSigFig.getNumSigFigs();
+	}
+
+	numToReturn.roundRealToSigFig(significandToSet, numSFsToSet);
+	
+	return numToReturn;
 }
 
 SigFig sfPow(const SigFig base, const SigFig exponent) {
-	return base;
+	SigFig numToReturn;
+	int numSFsToSet;
+	double significandToSet;
+
+	if ((double) base < 0) {
+		significandToSet = abs((double) base) * cos((double) exponent);
+	} else {
+		significandToSet = pow((double) base, (double) exponent);
+	}
+
+	if (base.getNumSigFigs() < exponent.getNumSigFigs()) {
+		numSFsToSet = base.getNumSigFigs();
+	} else {
+		numSFsToSet = exponent.getNumSigFigs();
+	}
+
+
+	numToReturn.roundRealToSigFig(significandToSet, numSFsToSet);
+	
+	return numToReturn;
+}
+
+SigFig sfAbs(const SigFig aSigFig) {
+	SigFig numToReturn;
+	double significandToSet = abs((double) aSigFig);
+	numToReturn.roundRealToSigFig(significandToSet, aSigFig.getNumSigFigs());
+
+	return numToReturn;
 }

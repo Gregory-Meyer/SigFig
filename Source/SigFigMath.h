@@ -18,12 +18,23 @@ SigFig sfCeil(const SigFig aSigFig);
 // rounds SigFig object and returns the result
 SigFig sfRound(const SigFig aSigFig);
 
-SigFig sfExp(const SigFig aSigFig);
+// returns e^(exponent) with the result having the same number of significant
+// figures as expnent
+SigFig sfExp(const SigFig exponent);
 
+// returns the real part of a^(aSigFig) with the result having the same number
+// of significant figures as aSigFig
 SigFig sfLn(const SigFig aSigFig);
 
-SigFig sfLog(const int base, const SigFig aSigFig);
+// returns the real part of log(base, aSigFig) with the result having the same
+// number of significant figures as either base or aSigFig, whichever is lower
+SigFig sfLog(const SigFig base, const SigFig aSigFig);
 
+// returns the real part of base^(exponent) with the result having the same
+// number of significant figures as either base or aSigFig, whichever is lower
 SigFig sfPow(const SigFig base, const SigFig exponent);
+
+// returns the absolute value of aSigFig
+SigFig sfAbs(const SigFig aSigFig);
 
 #endif

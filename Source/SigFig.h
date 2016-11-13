@@ -49,6 +49,10 @@ public:
 	// value
 	bool isInt() const;
 
+	// returns true if the significand of the SigFig is the same as the
+	// rounded value of the significand
+	bool significandIsInt() const;
+
 	// returns true if the object and aSigFig have the same double value and
 	// the same number of significant figures
 	bool isEqualStrict(SigFig aSigFig) const;
