@@ -476,5 +476,5 @@ SigFig& operator -- (SigFig& aSigFig) {
 SigFig operator -- (SigFig& aSigFig, int){
 	SigFig temp = aSigFig;
 	--aSigFig;
-	return aSigFig;
+	return temp;
 }	
