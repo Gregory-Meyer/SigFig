@@ -1,6 +1,4 @@
-#include <istream>
 #include <iostream>
-#include <iomanip>
 #include <cctype>
 #include <cstdlib>
 #include <cmath>
@@ -23,16 +21,15 @@ SigFig::SigFig(double real, int numSFsToSet) {
 	roundRealToSigFig(real, numSFsToSet);
 }
 
-SigFig SigFig::add(SigFig aSigFig) {
+SigFig SigFig::add(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet, place1, place2, expToSet;
-	double realValue1 = getSignificand() * pow(10, getExponent());
-	double realValue2 = aSigFig.getSignificand()
-		* pow(10, aSigFig.getExponent());
+	double realValue1 = this->doubleValue();
+	double realValue2 = aSigFig.doubleValue();
 	double compoundRealValue = realValue1 + realValue2;
 
 	if (compoundRealValue != 0) {
-		place1 = getExponent() - getNumSigFigs() + 1;
+		place1 = this->getExponent() - this->getNumSigFigs() + 1;
 		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
 
 		expToSet = 0;
@@ -67,16 +64,15 @@ SigFig SigFig::add(SigFig aSigFig) {
 	return numToReturn;
 }
 
-SigFig SigFig::subtract(SigFig aSigFig) {
+SigFig SigFig::subtract(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet, place1, place2, expToSet;
-	double realValue1 = getSignificand() * pow(10, getExponent());
-	double realValue2 = aSigFig.getSignificand()
-		* pow(10, aSigFig.getExponent());
+	double realValue1 = this->doubleValue();
+	double realValue2 = aSigFig.doubleValue();
 	double compoundRealValue = realValue1 - realValue2;
 
 	if (compoundRealValue != 0) {
-		place1 = getExponent() - getNumSigFigs() + 1;
+		place1 = this->getExponent() - this->getNumSigFigs() + 1;
 		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
 
 		expToSet = 0;
@@ -111,14 +107,13 @@ SigFig SigFig::subtract(SigFig aSigFig) {
 	return numToReturn;
 }
 
-SigFig SigFig::multiply(SigFig aSigFig) {
+SigFig SigFig::multiply(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double compoundRealValue = getSignificand() * pow(10, getExponent())
-		* aSigFig.getSignificand() * pow(10, aSigFig.getExponent());
+	double compoundRealValue = this->doubleValue() * aSigFig.doubleValue();
 
-	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
-		numSFsToSet = getNumSigFigs();
+	if (this->getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = this->getNumSigFigs();
 	} else {
 		numSFsToSet = aSigFig.getNumSigFigs();
 	}
@@ -127,14 +122,13 @@ SigFig SigFig::multiply(SigFig aSigFig) {
 	return numToReturn;
 }
 
-SigFig SigFig::divide(SigFig aSigFig) {
+SigFig SigFig::divide(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double compoundRealValue = getSignificand() * pow(10, getExponent())
-		/ aSigFig.getSignificand() * pow(10, aSigFig.getExponent());
+	double compoundRealValue = this->doubleValue() / aSigFig.doubleValue();
 
-	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
-		numSFsToSet = getNumSigFigs();
+	if (this->getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = this->getNumSigFigs();
 	} else {
 		numSFsToSet = aSigFig.getNumSigFigs();
 	}
@@ -143,17 +137,16 @@ SigFig SigFig::divide(SigFig aSigFig) {
 	return numToReturn;
 }
 
-SigFig SigFig::remainder(SigFig aSigFig) {
+SigFig SigFig::remainder(SigFig aSigFig) const {
 	SigFig numToReturn;
 	int numSFsToSet;
-	double realValue1 = getSignificand() * pow(10, getExponent());
-	double realValue2 = aSigFig.getSignificand()
-		* pow(10, aSigFig.getExponent());
+	double realValue1 = this->doubleValue();
+	double realValue2 = aSigFig.doubleValue();
 	double compoundRealValue = realValue1 - realValue2
-		* (int) (realValue1 / realValue2);
+	* (int) (realValue1 / realValue2);
 
-	if (getNumSigFigs() < aSigFig.getNumSigFigs()) {
-		numSFsToSet = getNumSigFigs();
+	if (this->getNumSigFigs() < aSigFig.getNumSigFigs()) {
+		numSFsToSet = this->getNumSigFigs();
 	} else {
 		numSFsToSet = aSigFig.getNumSigFigs();
 	}
@@ -162,61 +155,98 @@ SigFig SigFig::remainder(SigFig aSigFig) {
 	return numToReturn;
 }
 
-SigFig SigFig::sfRoundUp() {
-	double realValue = getSignificand() * pow(10, getExponent());
+SigFig SigFig::sfRoundUp() const {
+	double realValue = this->doubleValue();
 
 	if (realValue < 0) {
-		return sfFloor();
+		return this->sfFloor();
 	} else {
-		return sfCeil();
+		return this->sfCeil();
 	}
 }
 
-SigFig SigFig::sfRoundDown() {
+SigFig SigFig::sfRoundDown() const {
 	SigFig numToReturn;
-	double realValue = getSignificand() * pow(10, getExponent());
+	double realValue = this->doubleValue();
 
-	numToReturn.roundRealToSigFig(trunc(realValue), getNumSigFigs());
+	numToReturn.roundRealToSigFig(trunc(realValue), this->getNumSigFigs());
 	return numToReturn;
 }
 
-SigFig SigFig::sfFloor() {
+SigFig SigFig::sfFloor() const {
 	SigFig numToReturn;
-	double realValue = getSignificand() * pow(10, getExponent());
+	double realValue = this->doubleValue();
 
-	numToReturn.roundRealToSigFig(floor(realValue), getNumSigFigs());
+	numToReturn.roundRealToSigFig(floor(realValue), this->getNumSigFigs());
 	return numToReturn;
 }
 
-SigFig SigFig::sfCeil() {
+SigFig SigFig::sfCeil() const {
 	SigFig numToReturn;
-	double realValue = getSignificand() * pow(10, getExponent());
+	double realValue = this->doubleValue();
 
-	numToReturn.roundRealToSigFig(ceil(realValue), getNumSigFigs());
+	numToReturn.roundRealToSigFig(ceil(realValue), this->getNumSigFigs());
 	return numToReturn;
 }
 
-SigFig SigFig::sfRound() {
+SigFig SigFig::sfRound() const {
 	SigFig numToReturn;
-	double realValue = getSignificand() * pow(10, getExponent());
+	double realValue = this->doubleValue();
 
-	numToReturn.roundRealToSigFig(round(realValue), getNumSigFigs());
+	numToReturn.roundRealToSigFig(round(realValue), this->getNumSigFigs());
 	return numToReturn;
 }
 
-int SigFig::intValue() {
-	return (int) getSignificand() * pow(10, getExponent());
+int SigFig::intValue() const {
+	return (int) this->getSignificand() * pow(10, this->getExponent());
 }
 
-double SigFig::doubleValue() {
-	return getSignificand() * pow(10, getExponent());
+double SigFig::doubleValue() const {
+	return this->getSignificand() * pow(10, this->getExponent());
+}
+
+bool SigFig::isInt() const {
+	return this->intValue() == this->doubleValue();
+}
+
+bool SigFig::isEqualStrict(SigFig aSigFig) const {
+	return this->isEqual(aSigFig)
+		&& (this->getNumSigFigs() == aSigFig.getNumSigFigs());
+}
+
+bool SigFig::isEqual(SigFig aSigFig) const {
+	return this->doubleValue() == aSigFig.doubleValue();
+}
+
+bool SigFig::isGreater(SigFig aSigFig) const {
+	return this->doubleValue() > aSigFig.doubleValue();
+}
+
+bool SigFig::isLess(SigFig aSigFig) const {
+	return this->doubleValue() < aSigFig.doubleValue();
+}
+
+bool SigFig::isGreaterOrEqualStrict(SigFig aSigFig) const {
+	return (this->isGreater(aSigFig)) || (this->isEqualStrict(aSigFig));
+}
+
+bool SigFig::isGreaterOrEqual(SigFig aSigFig) const {
+	return !this->isLess(aSigFig);
+}
+
+bool SigFig::isLessOrEqualStrict(SigFig aSigFig) const {
+	return (this->isLess(aSigFig)) || (this->isEqualStrict(aSigFig));
+}
+
+bool SigFig::isLessOrEqual(SigFig aSigFig) const {
+	return !this->isGreater(aSigFig);
 }
 
 void SigFig::setSignificand(double newSignificand) {
 	significand_ = newSignificand;
 }
 
-double SigFig::getSignificand() {
+double SigFig::getSignificand() const {
 	return significand_;
 }
 
@@ -224,7 +254,7 @@ void SigFig::setExponent(int newExponent) {
 	exponent_ = newExponent;
 }
 
-int SigFig::getExponent() {
+int SigFig::getExponent() const {
 	return exponent_;
 }
 
@@ -233,13 +263,13 @@ void SigFig::setNumSigFigs(int newNumSigFigs) {
 		numSigFigs_ = newNumSigFigs;
 	} else {
 		cerr << "ERROR: Tried to set number of significant figures as " <<
-			newNumSigFigs <<
-			". Number of significant figures must be greater than zero."
-			<< endl;
+		newNumSigFigs <<
+		". Number of significant figures must be greater than zero."
+		<< endl;
 	}
 }
 
-int SigFig::getNumSigFigs() {
+int SigFig::getNumSigFigs() const {
 	return numSigFigs_;
 }
 
@@ -303,9 +333,9 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 		significandToSet /= 10;
 	}
 
-	setSignificand(significandToSet);
-	setExponent(expToSet);
-	setNumSigFigs(numSFsToSet);
+	this->setSignificand(significandToSet);
+	this->setExponent(expToSet);
+	this->setNumSigFigs(numSFsToSet);
 }
 
 void SigFig::read(istream& inputStream) {
@@ -326,12 +356,12 @@ void SigFig::read(istream& inputStream) {
 }
 
 void SigFig::write(ostream& outputStream) {
-	if (getNumSigFigs() == 1) {
-		outputStream << getSignificand() << 'e' << getExponent();
-	} else if (getSignificand() == 0) {
+	if (this->getNumSigFigs() == 1) {
+		outputStream << this->getSignificand() << 'e' << this->getExponent();
+	} else if (this->getSignificand() == 0) {
 		outputStream << "0e0";
 	} else {
-		double temp = getSignificand();
+		double temp = this->getSignificand();
 		int i = 1;
 
 		while (temp != round(temp)) {
@@ -339,31 +369,32 @@ void SigFig::write(ostream& outputStream) {
 			i++;
 		}
 
-		if (getSignificand() != round(getSignificand())) {
-			if (i < getNumSigFigs()) {
-				outputStream << getSignificand();
-				for (int j = 0; j < getNumSigFigs() - i; j++) {
+		if (this->isInt()) {
+			if (i < this->getNumSigFigs()) {
+				outputStream << this->getSignificand();
+				for (int j = 0; j < this->getNumSigFigs() - i; j++) {
 					outputStream << '0';
 				}
-				outputStream << 'e' << getExponent();
+				outputStream << 'e' << this->getExponent();
 			} else {
-				outputStream << getSignificand() << 'e' << getExponent();
+				outputStream << this->getSignificand() << 'e'
+				<< this->getExponent();
 			}
 		} else {
-			outputStream << getSignificand() << '.';
-			for (int j = 0; j < getNumSigFigs() - 1; j++) {
+			outputStream << this->getSignificand() << '.';
+			for (int j = 0; j < this->getNumSigFigs() - 1; j++) {
 				outputStream << '0';
 			}
-			outputStream << 'e' << getExponent();
+			outputStream << 'e' << this->getExponent();
 		}
 	}
 }
 
 void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
 	if (real == 0) {
-		setExponent(0);
-		setSignificand(0);
-		setNumSigFigs(1);
+		this->setExponent(0);
+		this->setSignificand(0);
+		this->setNumSigFigs(1);
 	} else {
 		int i = 0;
 
@@ -384,9 +415,9 @@ void SigFig::roundRealToSigFig(double real, int numSFsToSet) {
 			i++;
 		}
 
-		setExponent(i);
-		setSignificand(real);
-		setNumSigFigs(numSFsToSet);
+		this->setExponent(i);
+		this->setSignificand(real);
+		this->setNumSigFigs(numSFsToSet);
 	}
 }
 
@@ -398,4 +429,52 @@ istream& operator >> (istream& inputStream, SigFig& aSigFig) {
 ostream& operator << (ostream& outputStream, SigFig aSigFig) {
 	aSigFig.write(outputStream);
 	return outputStream;
+}
+
+bool operator == (const SigFig& lhs, const SigFig& rhs) {
+	return lhs.isEqual(rhs);
+}
+
+bool operator != (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs == rhs);
+}
+
+bool operator < (const SigFig& lhs, const SigFig& rhs) {
+	return lhs.isLess(rhs);
+}
+
+bool operator > (const SigFig& lhs, const SigFig& rhs) {
+	return rhs < lhs;
+}
+
+bool operator <= (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs > rhs);
+}
+
+bool operator >= (const SigFig& lhs, const SigFig& rhs) {
+	return !(lhs < rhs);
+}
+
+SigFig& operator ++ (SigFig& aSigFig) {
+	aSigFig.roundRealToSigFig(aSigFig.doubleValue() + 1,
+		aSigFig.getNumSigFigs());
+	return aSigFig;
+}
+
+SigFig operator ++ (SigFig& aSigFig, int) {
+	SigFig temp = aSigFig;
+	++aSigFig;
+	return temp;
+}
+
+SigFig& operator -- (SigFig& aSigFig) {
+	aSigFig.roundRealToSigFig(aSigFig.doubleValue() - 1,
+		aSigFig.getNumSigFigs());
+	return aSigFig;
+}
+
+SigFig operator -- (SigFig& aSigFig, int){
+	SigFig temp = aSigFig;
+	--aSigFig;
+	return temp;
 }
