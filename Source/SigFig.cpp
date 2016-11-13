@@ -162,6 +162,56 @@ SigFig SigFig::remainder(SigFig aSigFig) {
 	return numToReturn;
 }
 
+SigFig SigFig::sfRoundUp() {
+	double realValue = getSignificand() * pow(10, getExponent());
+
+	if (realValue < 0) {
+		return sfFloor();
+	} else {
+		return sfCeil();
+	}
+}
+
+SigFig SigFig::sfRoundDown() {
+	SigFig numToReturn;
+	double realValue = getSignificand() * pow(10, getExponent());
+
+	numToReturn.roundRealToSigFig(trunc(realValue), getNumSigFigs());
+	return numToReturn;
+}
+
+SigFig SigFig::sfFloor() {
+	SigFig numToReturn;
+	double realValue = getSignificand() * pow(10, getExponent());
+
+	numToReturn.roundRealToSigFig(floor(realValue), getNumSigFigs());
+	return numToReturn;
+}
+
+SigFig SigFig::sfCeil() {
+	SigFig numToReturn;
+	double realValue = getSignificand() * pow(10, getExponent());
+
+	numToReturn.roundRealToSigFig(ceil(realValue), getNumSigFigs());
+	return numToReturn;
+}
+
+SigFig SigFig::sfRound() {
+	SigFig numToReturn;
+	double realValue = getSignificand() * pow(10, getExponent());
+
+	numToReturn.roundRealToSigFig(round(realValue), getNumSigFigs());
+	return numToReturn;
+}
+
+int SigFig::intValue() {
+	return (int) getSignificand() * pow(10, getExponent());
+}
+
+double SigFig::doubleValue() {
+	return getSignificand() * pow(10, getExponent());
+}
+
 void SigFig::setSignificand(double newSignificand) {
 	significand_ = newSignificand;
 }

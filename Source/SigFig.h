@@ -36,16 +36,25 @@ public:
 	SigFig remainder(SigFig aSigFig);
 
 	// rounds SigFig object away from zero and returns the result
-	SigFig roundUp();
+	SigFig sfRoundUp();
 
 	// rounds SigFig object towards zero and returns the result
-	SigFig roundDown();
+	SigFig sfRoundDown();
 
 	// rounds SigFig object towards negative infinity and returns the resolt
-	SigFig floor();
+	SigFig sfFloor();
 
 	// rounds SigFig object towards positive infinity and returns the result
-	SigFig ceil();
+	SigFig sfCeil();
+
+	// rounds SigFig object and returns the result
+	SigFig sfRound();
+
+	// returns the value of the SigFig object as an int
+	int intValue();
+
+	// returns the value of the SigFig object as a double
+	double doubleValue();
 
 	// sets the significand or value as newSignificand
 	void setSignificand(double newSignificand);
