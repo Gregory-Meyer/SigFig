@@ -19,6 +19,10 @@ SigFig::SigFig(char input[MAX_INPUT_SIZE]) {
 	writeFromString(input);
 }
 
+SigFig::SigFig(double real, int numSFsToSet) {
+	roundRealToSigFig(real, numSFsToSet);
+}
+
 SigFig SigFig::add(SigFig aSigFig) {
 	SigFig numToReturn;
 	int numSFsToSet, place1, place2, expToSet;
@@ -30,9 +34,6 @@ SigFig SigFig::add(SigFig aSigFig) {
 	if (compoundRealValue != 0) {
 		place1 = getExponent() - getNumSigFigs() + 1;
 		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
-
-		cout << place1 << endl;
-		cout << place2 << endl;
 
 		expToSet = 0;
 
@@ -46,8 +47,6 @@ SigFig SigFig::add(SigFig aSigFig) {
 			expToSet--;
 		}
 
-		cout << expToSet << endl;
-
 		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
@@ -56,8 +55,10 @@ SigFig SigFig::add(SigFig aSigFig) {
 			numSFsToSet = expToSet - place2 + 1;
 		}
 
-		cout << numSFsToSet << endl;
-		
+		if (abs(compoundRealValue) < 1) {
+			numSFsToSet++;
+		}
+
 		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
 		numToReturn.roundRealToSigFig(0, 1);
@@ -78,9 +79,6 @@ SigFig SigFig::subtract(SigFig aSigFig) {
 		place1 = getExponent() - getNumSigFigs() + 1;
 		place2 = aSigFig.getExponent() - aSigFig.getNumSigFigs() + 1;
 
-		cout << place1 << endl;
-		cout << place2 << endl;
-
 		expToSet = 0;
 
 		while (abs(compoundRealValue) >= 10) {
@@ -93,8 +91,6 @@ SigFig SigFig::subtract(SigFig aSigFig) {
 			expToSet--;
 		}
 
-		cout << expToSet << endl;
-
 		compoundRealValue *= pow(10, expToSet);
 
 		if (place1 > place2) {
@@ -103,8 +99,10 @@ SigFig SigFig::subtract(SigFig aSigFig) {
 			numSFsToSet = expToSet - place2 + 1;
 		}
 
-		cout << numSFsToSet << endl;
-		
+		if (abs(compoundRealValue) < 1) {
+			numSFsToSet++;
+		}
+
 		numToReturn.roundRealToSigFig(compoundRealValue, numSFsToSet);
 	} else {
 		numToReturn.roundRealToSigFig(0, 1);
@@ -184,22 +182,30 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 	int strIndex = 0;
 	int i = 0;
 	bool hasDecimal = false;
+	bool isNegative = false;
 
 	bufferChar = input[i];
 
-	while ((isdigit(bufferChar)) || (bufferChar == '.')) {
+	if (bufferChar == '-') {
+		isNegative = true;
+	}
+
+	while ((isdigit(bufferChar)) || (bufferChar == '.')
+		|| (bufferChar == '-')) {
 		if (isdigit(bufferChar)) {
 			str[strIndex] = bufferChar;
 			strIndex++;
-		} else {
-			if (bufferChar == '.') {
-				hasDecimal = true;
-				decimalIndex = i;
-			}
+		} else if (bufferChar == '.') {
+			hasDecimal = true;
+			decimalIndex = i;
 		}
 
 		i++;
 		bufferChar = input[i];
+	}
+
+	if (isNegative) {
+		decimalIndex--;
 	}
 
 	numSFsToSet = 0;
@@ -219,7 +225,7 @@ void SigFig::writeFromString(char input[MAX_INPUT_SIZE]) {
 			}
 		}
 
-		expToSet = strIndex;
+		expToSet = strIndex - 1;
 	}
 
 	significandToSet = atof(input);
