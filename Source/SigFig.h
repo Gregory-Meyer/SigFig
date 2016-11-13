@@ -35,6 +35,18 @@ public:
 	// divides two SigFig objects and returns the remainder
 	SigFig remainder(SigFig aSigFig);
 
+	// rounds SigFig object away from zero and returns the result
+	SigFig roundUp();
+
+	// rounds SigFig object towards zero and returns the result
+	SigFig roundDown();
+
+	// rounds SigFig object towards negative infinity and returns the resolt
+	SigFig floor();
+
+	// rounds SigFig object towards positive infinity and returns the result
+	SigFig ceil();
+
 	// sets the significand or value as newSignificand
 	void setSignificand(double newSignificand);
 
