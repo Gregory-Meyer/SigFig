@@ -355,7 +355,7 @@ void SigFig::doubleToSigFig(const double real) {
 		numSFsToSet++;
 	}
 
-	significandToSet *= pow(10, numSFsToSet - 1);
+	significandToSet /= pow(10, numSFsToSet - 1);
 
 	this->setSignificand(significandToSet);
 	this->setExponent(expToSet);
